@@ -36,7 +36,7 @@ function Footer() {
       <footer className="py-4">
         <div className="container-xxl">
           <div className="row">
-            <div className="col-4">
+            <div className="col-5">
               <h4 className="mb-4 text-white">Contact us</h4>
               <div>
                 <address className="text-white fs-6">
@@ -49,7 +49,7 @@ function Footer() {
                 <a href="mailto:mayukhsen448@gmail.com" className="mt-4 d-block mb-0 text-white">
                   mayukhsen448@gmail.com
                 </a>
-                <div className="social-icons d-flex align-items-center gap-30 mt-4">
+                <div className="social-icons d-flex align-items-center gap-15 mt-4">
                   <a className="text-white" href="">
                     <BsLinkedin className="fs-4"/>
                   </a>
@@ -68,7 +68,7 @@ function Footer() {
                 </div>
               </div>
             </div>
-            <div className="col-3">
+            <div className="col-2">
               <h4 className="mb-4 text-white">Information</h4>
               <div className="footer-links d-flex flex-column">
                 <Link to={"#"} className="py-2 mb-1 text-white">
@@ -88,7 +88,7 @@ function Footer() {
                 </Link>
               </div>
             </div>
-            <div className="col-3">
+            <div className="col-2">
               <h4 className="mb-4 text-white">Account</h4>
               <div className="footer-links d-flex flex-column">
                 <Link to={"#"} className="py-2 mb-1 text-white">
@@ -102,7 +102,7 @@ function Footer() {
                 </Link>
               </div>
             </div>
-            <div className="col-3">
+            <div className="col-2">
               <h4 className="mb-4 text-white">Quick Links</h4>
               <div className="footer-links d-flex flex-column">
                 <Link to={"#"} className="py-2 mb-1 text-white">
