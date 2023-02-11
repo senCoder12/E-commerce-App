@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import ReactStars from "react-rating-stars-component";
 import Breadcrumb from "../Components/Breadcrumb";
+import Color from "../Components/Color";
 import Meta from "../Components/Meta";
 import ProductCard from "../Components/ProductCard";
 import "../CSS/myStore.css";
@@ -77,21 +78,7 @@ function MyStore() {
                   </div>
                   <h5 className="sub-title">Colors</h5>
                   <div>
-                    <ul className="colors ps-0">
-                      <li></li>
-                      <li></li>
-                      <li></li>
-                      <li></li>
-                      <li></li>
-                      <li></li>
-                      <li></li>
-                      <li></li>
-                      <li></li>
-                      <li></li>
-                      <li></li>
-                      <li></li>
-                      <li></li>
-                    </ul>
+                    <Color/>
                   </div>
                   <h5 className="sub-title">Size</h5>
                   <div>

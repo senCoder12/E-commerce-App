@@ -273,7 +273,9 @@ function Home() {
                 <div className="famous-content position-absolute">
                   <h5 className="text-dark">home speakers</h5>
                   <h6 className="text-dark">Room-filling sound.</h6>
-                  <p className="text-dark">From $699 or $116.58/mo. for 12 mo.*</p>
+                  <p className="text-dark">
+                    From $699 or $116.58/mo. for 12 mo.*
+                  </p>
                 </div>
               </div>
             </div>
@@ -351,10 +353,20 @@ function Home() {
             <div className="col-12">
               <h3 className="section-heading">Our Latest Blogs</h3>
             </div>
-            <BlogCard />
-            <BlogCard />
-            <BlogCard />
-            <BlogCard />
+          </div>
+          <div className="row">
+            <div className="col-3">
+              <BlogCard />
+            </div>
+            <div className="col-3">
+              <BlogCard />
+            </div>
+            <div className="col-3">
+              <BlogCard />
+            </div>
+            <div className="col-3">
+              <BlogCard />
+            </div>
           </div>
         </div>
       </section>

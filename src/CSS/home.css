@@ -24,6 +24,8 @@
     font-size: 14px;
     padding: 13px 33px;
     border-radius: 25px;
+    border: 0;
+    cursor: pointer;
 }
 .button:hover {
     color: var(--color-febd69);
