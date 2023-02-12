@@ -10,6 +10,10 @@ import Blog from './Pages/Blog';
 import CompareProducts from './Pages/CompareProducts';
 import Wishlist from './Pages/Wishlist';
 import Login from './Pages/Login';
+import Forgetpassword from './Pages/Forgetpassword';
+import Signup from './Pages/Signup';
+import ResetPassword from './Pages/ResetPassword';
+import SingleBlog from './Pages/SingleBlog';
 function App() {
   return (
     <div className="App">
@@ -21,9 +25,13 @@ function App() {
           <Route path='contact' element={<Contact/>}/>
           <Route path='store' element={<MyStore/>}/>
           <Route path='blogs' element={<Blog/>}/>
+          <Route path='/blogs/:id' element={<SingleBlog/>}/>
           <Route path='compare-product' element={<CompareProducts/>}/>
           <Route path='wishlist' element={<Wishlist/>}/>
           <Route path='login' element={<Login/>}/>
+          <Route path='signup' element={<Signup/>}/>
+          <Route path='forget-password' element={<Forgetpassword/>}/>
+          <Route path='reset-password' element={<ResetPassword/>}/>
         </Route>
       </Routes>
       </BrowserRouter>

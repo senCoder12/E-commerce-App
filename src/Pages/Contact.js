@@ -63,8 +63,8 @@ function Contact() {
                         placeholder="Comments"
                       />
                     </div>
-                    <div className="w-19 mt-3">
-                  <div className="button">Submit</div>
+                    <div className="w-19 mt-2">
+                      <div className="button">Submit</div>
                   </div>
                   </form>
                 </div>

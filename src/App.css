@@ -95,12 +95,14 @@ a{
   border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
 /* Compare product end */
-/* Login page */
+/* Auth page */
 .auth-card {
   padding: 20px;
   background-color: white;
   width: 500px;
   margin: 30px auto;
+  box-shadow: 0 0 10px #0000001a;
+  border-radius: 10px;
 }
 .auth-card h3 {
   font-size: 19px;
@@ -130,3 +132,9 @@ a{
   background-color: var(--color-131921);
   color: white;
 }
+.auth-card p {
+  font-size: 13px;
+  color: var(--color-777777);
+  margin: 15px 0px;
+}
+/* Auth page  end*/

@@ -14,7 +14,7 @@ function BlogCard() {
           dummy text of the printing and typesetting industry. Lorem Ipsum has
           been the industry's standard.
         </p>
-        <Link to="#" className="button">
+        <Link to="/blogs/:id" className="button">
           Read More
         </Link>
       </div>
