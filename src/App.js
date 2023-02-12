@@ -14,6 +14,11 @@ import Forgetpassword from './Pages/Forgetpassword';
 import Signup from './Pages/Signup';
 import ResetPassword from './Pages/ResetPassword';
 import SingleBlog from './Pages/SingleBlog';
+import ShippingPolicy from './Pages/ShippingPolicy';
+import RefundPolicy from './Pages/RefundPolicy';
+import TermsOfService from './Pages/TermsOfService';
+import PrivacyPolicy from './Pages/PrivacyPolicy';
+import SingleProduct from './Pages/SingleProduct';
 function App() {
   return (
     <div className="App">
@@ -23,7 +28,8 @@ function App() {
           <Route index element={<Home/>} />
           <Route path='about' element={<About/>}/>
           <Route path='contact' element={<Contact/>}/>
-          <Route path='store' element={<MyStore/>}/>
+          <Route path='product' element={<MyStore/>}/>
+          <Route path='product/:id' element={<SingleProduct/>}/>
           <Route path='blogs' element={<Blog/>}/>
           <Route path='/blogs/:id' element={<SingleBlog/>}/>
           <Route path='compare-product' element={<CompareProducts/>}/>
@@ -32,6 +38,10 @@ function App() {
           <Route path='signup' element={<Signup/>}/>
           <Route path='forget-password' element={<Forgetpassword/>}/>
           <Route path='reset-password' element={<ResetPassword/>}/>
+          <Route path='privacy-policy' element={<PrivacyPolicy/>}/>
+          <Route path='terms-of-services' element={<TermsOfService/>}/>
+          <Route path='refund-policy' element={<RefundPolicy/>}/>
+          <Route path='shipping-policy' element={<ShippingPolicy/>}/>
         </Route>
       </Routes>
       </BrowserRouter>

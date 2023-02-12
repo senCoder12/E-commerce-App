@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ReactStars from "react-rating-stars-component";
-import Breadcrumb from "../Components/Breadcrumb";
 import Color from "../Components/Color";
+import Breadcrumb from "../Components/Breadcrumb";
 import Meta from "../Components/Meta";
 import ProductCard from "../Components/ProductCard";
 import "../CSS/myStore.css";

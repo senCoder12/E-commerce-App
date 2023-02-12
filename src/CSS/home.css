@@ -175,6 +175,10 @@
     color: var(--color-777777);
     font-size: 14px;
 }
+.single-blog-card a p {
+    font-size: 15px;
+    font-weight: 500;
+}
 /* Blog Card end */
 
 /* Product card start */

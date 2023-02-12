@@ -71,19 +71,19 @@ function Footer() {
             <div className="col-2">
               <h4 className="mb-4 text-white">Information</h4>
               <div className="footer-links d-flex flex-column">
-                <Link to={"#"} className="py-2 mb-1 text-white">
+                <Link to={"/privacy-policy"} className="py-2 mb-1 text-white">
                   Privacy Policy
                 </Link>
-                <Link to={"#"} className="py-2 mb-1 text-white">
-                  Shopping Policy
+                <Link to={"/shipping-policy"} className="py-2 mb-1 text-white">
+                  Shipping Policy
                 </Link>
-                <Link to={"#"} className="py-2 mb-1 text-white">
+                <Link to={"/refund-policy"} className="py-2 mb-1 text-white">
                   Refund Policy
                 </Link>
-                <Link to={"#"} className="py-2 mb-1 text-white">
+                <Link to={"/terms-of-services"} className="py-2 mb-1 text-white">
                   Terms & Conditions
                 </Link>
-                <Link to={"#"} className="py-2 mb-1 text-white">
+                <Link to={"/blogs"} className="py-2 mb-1 text-white">
                   Blogs
                 </Link>
               </div>

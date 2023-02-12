@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Breadcrumb from "../Components/Breadcrumb";
 import Meta from "../Components/Meta";
+import {BsArrowLeft} from "react-icons/bs"
 
 function SingleBlog() {
   return (
@@ -13,16 +14,17 @@ function SingleBlog() {
           <div className="row">
             <div className="col-12">
               <div className="single-blog-card">
-                <Link to="/blogs" className="d-flex align-items-center">
-                  Go back
+                <Link to="/blogs" className="d-flex align-items-center gap-10">
+                  <BsArrowLeft />
+                  <p className="mb-0">Back to Blogs</p>
                 </Link>
                 <h3 className="title">
                   A Beautiful Sunday Morning Renaissance
                 </h3>
                 <img
-                  className="img-fluid w-100"
                   src="images/blog-1.jpg"
                   alt="blog"
+                  className="img-fluid w-100 my-4"
                 />
                 <p>
                   it’s not something people need, but it’s what they want. It

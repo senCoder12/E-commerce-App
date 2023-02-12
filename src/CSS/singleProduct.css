@@ -1,0 +1,42 @@
+.description-wrapper h4, .reviews-wrapper h3 {
+    font-size: 26px;
+    color: #1c1c1b;
+    margin-bottom: 30px;
+}
+
+.description-wrapper p,.review-head p, .review p {
+    font-size: 14px;
+    color: #777777;
+}
+
+.description-content-wrapper {
+    border-radius: 10px;
+}
+
+.review-inner-wrapper {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+}
+
+.review-form h4 {
+    font-size: 16px;
+    color: #777777;
+}
+.review-head {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding-bottom: 20px;
+}
+
+.review-head h4 {
+    font-size: 18px;
+    color: #1c1c1b;
+}
+
+.review {
+    padding: 20px 0px;
+}
+.review:not(:last-child), .review-form {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+

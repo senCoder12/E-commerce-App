@@ -138,3 +138,12 @@ a{
   margin: 15px 0px;
 }
 /* Auth page  end*/
+
+
+/* Policy */
+.policy {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+} 
+/* policy end */
