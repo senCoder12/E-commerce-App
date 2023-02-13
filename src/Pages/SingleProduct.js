@@ -5,10 +5,12 @@ import ReactStars from "react-rating-stars-component";
 import "../CSS/singleProduct.css";
 import { useState } from "react";
 import ProductCard from "../Components/ProductCard";
+import ReactImageZoom from "react-image-zoom";
 
 function SingleProduct() {
   const [orderedProduct, setOrderedProduct] = useState(true);
   const [showReviewForm, setReviewForm] = useState(false);
+  const props = { width: 600, zoomWidth: 650, zoomPosition: "original", img: "https://i.pinimg.com/originals/c4/2a/f6/c42af627abc222376be52d4512e26ce9.jpg" };
   return (
     <>
       <Meta title="Single Product title" />
@@ -16,7 +18,11 @@ function SingleProduct() {
       <section className="single-product-wrapper home-wrapper-2 py-5">
         <div className="container-xxl">
           <div className="row">
-            <div className="col-6"></div>
+            <div className="col-6">
+              <div className="main-product-image">
+                <div><ReactImageZoom {...props} /></div>
+              </div>
+            </div>
             <div className="col-6"></div>
           </div>
         </div>
@@ -78,7 +84,7 @@ function SingleProduct() {
                         >
                           <p
                             className="text-dark text-decoration-underline mb-0"
-                            style={{"cursor": "pointer"}}
+                            style={{ cursor: "pointer" }}
                           >
                             Write a review
                           </p>
