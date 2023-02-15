@@ -7,8 +7,9 @@ import { useState } from "react";
 import ProductCard from "../Components/ProductCard";
 import ReactImageZoom from "react-image-zoom";
 import Color from "../Components/Color";
-import { MdOutlineFavoriteBorder } from "react-icons/md";
+import { MdOutlineFavoriteBorder, MdOutlineLocalShipping } from "react-icons/md";
 import { IoIosGitCompare } from "react-icons/io";
+import {GiMaterialsScience} from "react-icons/gi";
 
 function SingleProduct() {
   const [orderedProduct, setOrderedProduct] = useState(true);
@@ -191,7 +192,10 @@ function SingleProduct() {
                         aria-expanded="true"
                         aria-controls="collapseOne"
                       >
-                        Shipping & Returns
+                        <div className="d-flex align-items-center gap-10">
+                          <MdOutlineLocalShipping/>
+                          <p className="mb-0">Shipping & Returns</p>
+                        </div>
                       </button>
                     </h2>
                     <div
@@ -217,7 +221,10 @@ function SingleProduct() {
                         aria-expanded="true"
                         aria-controls="collapseTwo"
                       >
-                        Materials
+                        <div className="d-flex align-items-center gap-10">
+                          <GiMaterialsScience/>
+                          <p className="mb-0">Materials</p>
+                        </div>
                       </button>
                     </h2>
                     <div
@@ -245,7 +252,10 @@ function SingleProduct() {
                         aria-expanded="true"
                         aria-controls="collapseThree"
                       >
-                        Care Instructions
+                        <div className="d-flex justify-content-center align-items-center gap-10">
+                      <MdOutlineFavoriteBorder />
+                      <p className="mb-0">Care Instructions</p>
+                    </div>
                       </button>
                     </h2>
                     <div

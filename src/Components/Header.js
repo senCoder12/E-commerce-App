@@ -53,9 +53,9 @@ function Header() {
                 <div>
                   <Link
                     to={"/compare-product"}
-                    className="d-flex align-items-center gap-10 text-white"
+                    className="d-flex align-items-center gap-10 text-white rotate"
                   >
-                    <img src="images/compare.svg" alt="compare" />
+                    <img src="images/compare.svg" alt="compare" className="aButton rotateY"/>
                     <p className="mb-0">
                       Compare <br /> Products
                     </p>
@@ -64,9 +64,9 @@ function Header() {
                 <div>
                   <Link
                     to={"/wishlist"}
-                    className="d-flex align-items-center gap-10 text-white"
+                    className="d-flex align-items-center gap-10 text-white rotate"
                   >
-                    <img src="images/wishlist.svg" alt="wishlist" />
+                    <img src="images/wishlist.svg" alt="wishlist" className="aButton rotateY"/>
                     <p className="mb-0">
                       Favourite <br /> wishlist
                     </p>
@@ -75,9 +75,9 @@ function Header() {
                 <div>
                   <Link
                     to={"/login"}
-                    className="d-flex align-items-center gap-10 text-white"
+                    className="d-flex align-items-center gap-10 text-white rotate"
                   >
-                    <img src="images/user.svg" alt="user" />
+                    <img src="images/user.svg" alt="user" className="aButton rotateY"/>
                     <p className="mb-0">
                       Log in <br /> My Account
                     </p>
@@ -85,10 +85,10 @@ function Header() {
                 </div>
                 <div>
                   <Link
-                    to={"/"}
-                    className="d-flex align-items-center gap-10 text-white"
+                    to={"/cart"}
+                    className="d-flex align-items-center gap-10 text-white rotate"
                   >
-                    <img src="images/cart.svg" alt="cart" />
+                    <img src="images/cart.svg" alt="cart" className="aButton rotateY"/>
                     <div className="d-flex flex-column gap-10">
                       <span className="badge bg-white text-dark">0</span>
                       <p className="mb-0">$ 500</p>

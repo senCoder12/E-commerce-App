@@ -62,3 +62,46 @@
 .header-bottom .menuIcon {
     margin-right: 20px;
 }
+.aButton {
+	transition        : 1.0s ease all;
+	-moz-transition   : 1.0s ease all;
+	-webkit-transition: 1.0s ease all;
+
+	border            : none;
+	/* border-radius     : 3px; */
+	/* padding           : 0px 10px 0px 10px; */
+
+	/* background-color  : #dfdfdf;
+	color             : #0090d3; */
+
+	/* font-size         : 14px; */
+
+	text-decoration   : none;
+
+	box-sizing        : border-box;
+	-webkit-box-sizing: border-box;
+	/* height            : 35px; */
+}
+.rotate:hover .aButton {
+	transition        : 1.0s ease all;
+	-moz-transition   : 1.0s ease all;
+	-webkit-transition: 1.0s ease all;
+
+	/* background-color  : #ffd700;
+	color             : #696969; */
+}
+.rotateY {
+	cursor: pointer;	
+}
+.rotate:hover .rotateY {
+	transform               : rotateY(360deg);
+	-moz-transform          : rotateY(360deg);
+	-webkit-transform       : rotateY(360deg);
+	transform-origin        : center;
+	-moz-transform-origin   : center;
+	-webkit-transform-origin: center;
+
+	transition              : transform 1.0s ease all;
+	-moz-transition         : -moz-transform 1.0s ease all;
+	-webkit-transition      : -webkit-transform 1.0s ease all;
+}

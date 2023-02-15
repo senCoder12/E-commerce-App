@@ -68,14 +68,14 @@
     width: 48%;
 }
 
-.main-product-image .js-image-zoom__zoomed-area {
-    /* left: 50px !important; */
-    /* padding: 10px; */
-    /* background-color: white; */
-    /* border-radius: 10px; */
-    /* z-index: 1000; */
-    /* height: 500px !important; */
-}
+/* .main-product-image .js-image-zoom__zoomed-area {
+    left: 50px !important;
+    padding: 10px;
+    background-color: white;
+    border-radius: 10px;
+    z-index: 1000;
+    height: 500px !important;
+} */
 
 .main-product-details {
     background-color: white;
