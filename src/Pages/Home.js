@@ -2,12 +2,21 @@ import React from "react";
 import Marquee from "react-fast-marquee";
 import { Link } from "react-router-dom";
 import BlogCard from "../Components/BlogCard";
+import Meta from "../Components/Meta";
 import ProductCard from "../Components/ProductCard";
 import SpecialProduct from "../Components/SpecialProduct";
 import "../CSS/home.css";
+import { blogData, services } from "../Utils/blogData";
 function Home() {
+  const excerpt = (str) => {
+    if (str.length > 80) {
+      str = str.substring(0, 80) + "...";
+    }
+    return str;
+  };
   return (
     <>
+      <Meta title="Ecommerce website-Dev Corner " />
       <section className="home-wrapper-1 py-5">
         <div className="container-xxl">
           <div className="row">
@@ -91,46 +100,22 @@ function Home() {
           </div>
         </div>
       </section>
-      <section className="home-wrapper-2 py-5">
+      <section className="service-wrapper home-wrapper-2 py-5">
         <div className="container-xxl">
           <div className="row">
             <div className="col-12">
-              <div className="servies d-flex align-items-center justify-content-between">
-                <div className="d-flex align-items-center gap-15">
-                  <img src="images/service.png" alt="services" />
-                  <div>
-                    <h6>Free Shipping</h6>
-                    <p className="mb-0">Free all orders over $5</p>
+              <div className="services d-flex align-items-center justify-content-between">
+                {
+                  services && services.map(service =>{
+                    return <div className="d-flex align-items-center gap-15">
+                    <img src={service.img} alt="services" />
+                    <div>
+                      <h6>{service.title}</h6>
+                      <p className="mb-0">{service.para}</p>
+                    </div>
                   </div>
-                </div>
-                <div className="d-flex align-items-center gap-15">
-                  <img src="images/service-02.png" alt="services" />
-                  <div>
-                    <h6>Daily Surprise Offers</h6>
-                    <p className="mb-0">Save Upto 25% off</p>
-                  </div>
-                </div>
-                <div className="d-flex align-items-center gap-15">
-                  <img src="images/service-03.png" alt="services" />
-                  <div>
-                    <h6>Support 24/7</h6>
-                    <p className="mb-0">Shop with an expert</p>
-                  </div>
-                </div>
-                <div className="d-flex align-items-center gap-15">
-                  <img src="images/service-04.png" alt="services" />
-                  <div>
-                    <h6>Affordable Prices</h6>
-                    <p className="mb-0">Get Factory default price</p>
-                  </div>
-                </div>
-                <div className="d-flex align-items-center gap-15">
-                  <img src="images/service-05.png" alt="services" />
-                  <div>
-                    <h6>Secure Payments</h6>
-                    <p className="mb-0">100% Protected Payment</p>
-                  </div>
-                </div>
+                  })
+                }
               </div>
             </div>
           </div>
@@ -215,7 +200,7 @@ function Home() {
           </div>
         </div>
       </section>
-      <section className="famous-wrapper py-5 home-wrpper-2">
+      <section className="famous-wrapper py-5 home-wrapper-2">
         <div className="container-xxl">
           <div className="row">
             <div className="col-3">
@@ -355,18 +340,20 @@ function Home() {
             </div>
           </div>
           <div className="row">
-            <div className="col-3">
-              <BlogCard />
-            </div>
-            <div className="col-3">
-              <BlogCard />
-            </div>
-            <div className="col-3">
-              <BlogCard />
-            </div>
-            <div className="col-3">
-              <BlogCard />
-            </div>
+            {blogData &&
+              blogData.map((data, idx) => {
+                if(idx === 4) return null;
+                return (
+                  <div className="col-3">
+                    <BlogCard
+                      img={data.img}
+                      desc={excerpt(data.desc)}
+                      id={idx + 1}
+                      title={data.title}
+                    />
+                  </div>
+                );
+              })}
           </div>
         </div>
       </section>

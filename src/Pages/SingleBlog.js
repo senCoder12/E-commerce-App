@@ -1,14 +1,17 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Breadcrumb from "../Components/Breadcrumb";
 import Meta from "../Components/Meta";
 import {BsArrowLeft} from "react-icons/bs"
+import { blogData } from "../Utils/blogData";
 
 function SingleBlog() {
+  let { id } = useParams();
+  const {img,title,desc} = blogData[id-1];
   return (
     <>
-      <Meta title="Dynamic Blog NAME" />
-      <Breadcrumb title="Dynamic Blog NAME" />
+      <Meta title={title} />
+      <Breadcrumb title={title} />
       <div className="single-blog-wrapper py-5 home-wrapper-2">
         <div className="container-xxl">
           <div className="row">
@@ -19,20 +22,15 @@ function SingleBlog() {
                   <p className="mb-0">Back to Blogs</p>
                 </Link>
                 <h3 className="title">
-                  A Beautiful Sunday Morning Renaissance
+                  {title}
                 </h3>
                 <img
-                  src="images/blog-1.jpg"
+                  src={img}
                   alt="blog"
                   className="img-fluid w-100 my-4"
                 />
                 <p>
-                  it’s not something people need, but it’s what they want. It
-                  really pulls at their heart. I have a fantastic relationship
-                  with money.Scelerisque sociosqu ullamcorper urna nisl mollis
-                  vestibulum pretium commodo inceptos cum condimentum placerat
-                  diam venenatis blandit hac eget dis lacus a parturient a
-                  accumsan nisl ante vestibulum.
+                  {desc}
                 </p>
               </div>
             </div>

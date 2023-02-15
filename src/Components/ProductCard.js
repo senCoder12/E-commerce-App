@@ -1,16 +1,21 @@
 import React from "react";
 import ReactStars from "react-rating-stars-component";
 import { Link, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 function ProductCard(props) {
   const { grid } = props;
   const location = useLocation();
+  const navigate = useNavigate();
   return (
     <div
       className={`${location.pathname === "/product" ? `gr-${grid}` : "col-3"}`}
     >
-      <Link to={"/product/:id"} className="product-card position-relative">
+      <div className="product-card position-relative" onClick={()=>{
+        navigate("/product/:id");
+      }}>
         <div className="wishlist-icon position-absolute">
-          <Link to={"#"}>
+          <Link to={"/"}>
             <img src="images/wish.svg" alt="wishlist" />
           </Link>
         </div>
@@ -51,7 +56,7 @@ function ProductCard(props) {
             </Link>
           </div>
         </div>
-      </Link>
+      </div>
     </div>
   );
 }

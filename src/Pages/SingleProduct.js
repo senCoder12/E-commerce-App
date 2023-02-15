@@ -145,9 +145,9 @@ function SingleProduct() {
                   </div>
                   <div className="py-2">
                     <h3 className="product-heading mb-2">Color :</h3>
-                    <p className="product-data">
+                    <div className="product-data">
                       <Color />
-                    </p>
+                    </div>
                   </div>
                   <div className="d-flex gap-15 align-items-center py-2">
                     <h3 className="product-heading">Quantity :</h3>
@@ -181,7 +181,7 @@ function SingleProduct() {
                     </div>
                   </div>
                 </div>
-                <div class="accordion" id="accordionPanelsStayOpenExample">
+                <div className="accordion" id="accordionPanelsStayOpenExample">
                   <div className="d-flex gap-10 flex-column border-bottom accordion-item">
                     <h2 className="accordion-header" id="headingOne">
                       <button
@@ -273,7 +273,7 @@ function SingleProduct() {
                 </div>
                 <div className="d-flex gap-10 align-items-center mt-4">
                   <h3 className="product-heading">Share Link :</h3>
-                  <a href="javascript:void(0);" onClick={()=>copyToClipboard("copy link")} className="product-data">Copy to clipboard</a>
+                  <p onClick={()=>copyToClipboard("copy link")} className="product-data">Copy to clipboard</p>
                 </div>
               </div>
             </div>

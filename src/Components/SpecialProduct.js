@@ -37,7 +37,7 @@ function SpecialProduct() {
             </div>
             <div className="prod-count mt-3">
               <p>Product: 5</p>
-              <div class="progress">
+              <div className="progress">
                 <div
                   className="progress-bar"
                   role="progressbar"

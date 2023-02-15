@@ -6,8 +6,8 @@ import Meta from '../Components/Meta'
 function CompareProducts() {
   return (
     <>
-        <Meta title="Contact Us" />
-      <Breadcrumb title="Contact Us" />
+        <Meta title="Compare Product" />
+      <Breadcrumb title="Compare Product" />
       <div className='compare-product-wrapper py-5 home-wrapper-2'>
         <div className='container-xxl'>
             <div className='row'>

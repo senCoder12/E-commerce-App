@@ -188,7 +188,7 @@ function MyStore() {
                       className="form-control form-select"
                     >
                       <option value="manual">Featured</option>
-                      <option value="best-selling" selected="selected">
+                      <option value="best-selling">
                         Best selling
                       </option>
                       <option value="title-ascending">
