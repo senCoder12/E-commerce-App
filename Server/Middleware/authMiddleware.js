@@ -15,8 +15,7 @@ export const authMiddleware = async (req, res, next) => {
             res.status(404).send({message: "Not Authorized, Token expired. Login again",stack: error?.stack});
         }
     } else {
-        throw new Error("There is no token available in header");
-        res.status(404).send({message: "There is no token available in header",stack: error?.stack});
+        res.status(500).send({message: "There is no token available in header",stack: error?.stack});
     }
 }
 
