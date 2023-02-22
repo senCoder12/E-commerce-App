@@ -33,7 +33,13 @@ role: {
     enum: ["admin", "user"],
     default: "user",
     required: false,
-}
+},
+cart: {
+    type: Array,
+    default: [],
+},
+address: [{type: mongoose.Schema.Types.ObjectId, ref: "Address"}],
+wishlist: [{type: mongoose.Schema.Types.ObjectId, ref: "Wishlist"}]
 },
 {
 versionKey: false,

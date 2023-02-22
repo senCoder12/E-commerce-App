@@ -144,9 +144,9 @@ export const getUser = async(req, res) => {
 }
 
 export const deleteUser = async(req, res) => {
-    const {id} = req.params;
+    const {_id} = req.user;
     try {
-        const user = await userModel.findByIdAndDelete(id).select(["-password", "-createdAt", "-updatedAt"]);
+        const user = await userModel.findByIdAndDelete(_id).select(["-password", "-createdAt", "-updatedAt"]);
         res.status(200).send({user,"message":"successfully deleted"});
     } catch (error) {
         res.status(401).send({
@@ -156,9 +156,9 @@ export const deleteUser = async(req, res) => {
 }
 
 export const updateUser = async(req, res) => {
-    const {id} = req.params;
+    const {_id} = req.user;
     try {
-        const user = await userModel.findByIdAndUpdate(id,{
+        const user = await userModel.findByIdAndUpdate(_id,{
             first_name: req.body?.first_name,
             last_name: req.body?.last_name,
             email: req.body?.email,

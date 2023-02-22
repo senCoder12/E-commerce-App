@@ -19,10 +19,10 @@ app.use(cors())
 //     res.send("Hi there, Welcome to my server!");
 // })
 app.use("/auth",userRouter);
+app.use(errorHandler);
 mongoose.set('strictQuery', true);
 
 app.use(notFound);
-app.use(errorHandler);
 app.listen(PORT, ()=> {
     connection();
     console.log('listening on port '+PORT);
