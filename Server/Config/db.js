@@ -11,9 +11,9 @@ const MONGODB_URL = `mongodb+srv://${username}:${password}@cluster0.mhbbngn.mong
 const connection = async () => {
     try {
         await mongoose.connect(MONGODB_URL);
-        console.log("Database connection established");
+        console.log("Database connection established")
     } catch (error) {
-        console.log("Database connection error: " + error);
+        console.log("Database connection " + error);
     }
     
 }

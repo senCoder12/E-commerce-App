@@ -38,6 +38,13 @@ cart: {
     type: Array,
     default: [],
 },
+isBlocked: {
+    type: Boolean,
+    default: false
+},
+refreshToken: {
+    type: String,
+},
 address: [{type: mongoose.Schema.Types.ObjectId, ref: "Address"}],
 wishlist: [{type: mongoose.Schema.Types.ObjectId, ref: "Wishlist"}]
 },
@@ -46,11 +53,6 @@ versionKey: false,
 timestamps: true,
 }
 );
-
-userSchema.pre("save",async function(next){
-    const salt = await bcrypt.genSaltSync(10);
-    this.password = await bcrypt.hash(this.password,salt);
-})
 
 const userModel = mongoose.model("User", userSchema);
 

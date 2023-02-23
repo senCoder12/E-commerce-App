@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import PasswordValidator from "password-validator";
 import generator from "generate-password";
 import userModel from "../Models/user.model.js";
+import { generateToken, isValidMongodbId } from "../Utils/helper.js";
 
 var schema = new PasswordValidator();
 schema.is().min(8).has().uppercase().has().lowercase().has().digits(1);
@@ -37,8 +38,7 @@ export const signup = async (req, res) => {
         .status(400)
         .json({ message: "Mobile number should be 10 number" });
     }
-
-    // const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = await userModel.create({
       uid: generator.generate({
         length: 13,
@@ -48,10 +48,12 @@ export const signup = async (req, res) => {
       last_name,
       email,
       mobile,
-      password,
+      password: hashedPassword,
+      role
     });
     res.status(201).json({
       message: "Account successfully created",
+      data: newUser
     });
   } catch (err) {
     console.log(err);
@@ -65,10 +67,14 @@ export const signin = async (req, res) => {
     try {
     const { email, password } = req.body;
     const user = await userModel.find({ email });
+    const {isBlocked} = user;
+    if(isBlocked) {
+      res.status(200).send({message:"You are blocked by the administrator! Please contact the administrator."});
+    }
     if (user && user.length == 1) {
         const isValidPassword = await bcrypt.compare(password, user[0].password);
         if (isValidPassword) {
-        const token = jwt.sign(
+        const token = generateToken(
             {
             uid: user[0].uid,
             email,
@@ -78,15 +84,34 @@ export const signin = async (req, res) => {
             expiresIn: "30d",
             }
         );
+        const refreshToken = generateToken(
+          {
+          uid: user[0].uid,
+          email,
+          },
+          process.env.JWT_SECRET_KEY,
+          {
+          expiresIn: "10d",
+          }
+        );
+        const updateUser = await userModel.findByIdAndUpdate(user[0]._id,{
+          refreshToken
+        },{
+          new: true
+        })
+        res.cookie("refreshToken", refreshToken,{
+          httpOnly: true,
+          maxAge: 10 * 60 * 60 * 24 * 1000
+        })
         res.status(200).send({
             token,
-            data: user[0],
+            data: updateUser,
             message: "Login successful",
         });
         } else {
-        res.status(501).send({
-            message: "Password is not valid",
-        });
+          res.status(501).send({
+              message: "Password is not valid",
+          });
         }
     } else {
         res.status(501).send({
@@ -97,23 +122,6 @@ export const signin = async (req, res) => {
     console.log(err);
     res.status(500).send({
         message: "Something went wrong",
-    });
-    }
-};
-
-const secret_key = process.env.JWT_SECRET_KEY;
-export const getUserByJWT = async (req, res) => {
-    try {
-    const token = req.headers.authorization?.split(" ")[1];
-    const decodedData = jwt.verify(token, secret_key);
-    const uid = decodedData?.uid;
-    const user = await userModel
-        .findOne({ uid })
-        .select(["-password", "-createdAt", "-updatedAt"]);
-    res.status(200).send({ user });
-    } catch (error) {
-    res.status(401).send({
-        message: "Invalid token/Expired token",
     });
     }
 };
@@ -158,6 +166,9 @@ export const deleteUser = async(req, res) => {
 export const updateUser = async(req, res) => {
     const {_id} = req.user;
     try {
+      if(req.body && req.body.password) {
+        req.body.password = await bcrypt.hash(req.body?.password, 10)
+      }
         const user = await userModel.findByIdAndUpdate(_id,{
             first_name: req.body?.first_name,
             last_name: req.body?.last_name,
@@ -165,11 +176,106 @@ export const updateUser = async(req, res) => {
             password: req.body?.password,
             mobile: req.body?.mobile
         },{new: true}).select(["-password", "-createdAt", "-updatedAt"]);
-        res.status(200).send({user,"message":"successfully Updated"});
+        return res.status(200).send({user,"message":"successfully Updated"});
     } catch (error) {
         console.log(error);
         res.status(401).send({
             message: "Something went wrong",
         });
         }
+}
+
+export const blockUser = async(req, res) => {
+  const {id} = req.params;
+  try {
+    if(isValidMongodbId(id)) {
+      const updateBlockUserInfo = await userModel.findByIdAndUpdate(id,{
+        isBlocked: true
+      },{
+        new: true
+      });
+      return res.json({data: updateBlockUserInfo,message:"User blocked successfully!"});
+    } else {
+      return res.status(404).send({message: 'Invalid user'});
+    }
+  } catch (error) {
+    return res.status(500).send({message: error?.message});
+  }
+}
+
+export const unblockUser = async(req, res) => {
+  const {id} = req.params;
+  try {
+    if(isValidMongodbId(id)) {
+      const updateBlockUserInfo = await userModel.findByIdAndUpdate(id,{
+        isBlocked: false
+      },{
+        new: true
+      });
+      return res.json({data: updateBlockUserInfo,message:"User unblocked successfully!"});
+    } else {
+      return res.status(404).send({message: 'Invalid user'});
+    }
+  } catch (error) {
+    res.status(500).send({message: error?.message});
+  }
+}
+
+export const handleRefreshToken = async (req, res) => {
+  const cookie = req.cookies;
+  if(!cookie?.refreshToken) {
+    return res.status(403).send({ message:"No Refresh token available!"});
+  }
+  const refreshToken = cookie.refreshToken;
+  const user = await userModel.findOne({refreshToken});
+  if(!user) return res.status(403).send({ message:"No Refresh token available in db or not matched!"});
+  jwt.verify(refreshToken, process.env.JWT_SECRET_KEY, async (err, decoded)=> {
+    if(err || user.uid !== decoded.uid) return res.status(403).send({ message:"There is something wrong with refresh token!"});
+    const accessToken = generateToken(
+      {
+      uid: user.uid,
+      email: user.email,
+      },
+      process.env.JWT_SECRET_KEY,
+      {
+      expiresIn: "10d",
+      }
+    );
+    res.cookie("refreshToken", accessToken,{
+      httpOnly: true,
+      maxAge: 10 * 60 * 60 * 24 * 1000
+    })
+    await userModel.findOneAndUpdate({uid: decoded.uid}, {
+      refreshToken: accessToken
+    })
+    res.json({accessToken, message: "Token refreshed successfully!"})
+  })
+}
+
+export const logout = async(req, res) => {
+  const cookie = req.cookies;
+  if(!cookie?.refreshToken) {
+    return res.status(403).send({ message:"No Refresh token available!"});
+  }
+  const refreshToken = cookie.refreshToken;
+  const user = await userModel.findOne({refreshToken});
+  if(!user) {
+    res.clearCookie("refreshToken",{
+      httpOnly: true,
+      secure: true
+    });
+    return res.sendStatus(204);
+  }
+  let decodeData;
+  jwt.verify(refreshToken, process.env.JWT_SECRET_KEY,(err, decoded)=>{
+    decodeData = decoded;
+  })
+  await userModel.findOneAndUpdate({uid: decodeData.uid}, {
+    refreshToken: ""
+  })
+  res.clearCookie("refreshToken",{
+    httpOnly: true,
+    secure: true
+  });
+  return res.status(204).send({message: "Logout successfully!"});
 }

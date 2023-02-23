@@ -15,14 +15,14 @@ export const authMiddleware = async (req, res, next) => {
             res.status(404).send({message: "Not Authorized, Token expired. Login again",stack: error?.stack});
         }
     } else {
-        res.status(500).send({message: "There is no token available in header",stack: error?.stack});
+        res.status(500).send({message: "There is no token available in header"});
     }
 }
 
 export const isAdmin = async(req, res, next) => {
     const {role} = req.user;
     if(role !== "admin") {
-        res.status(404).send({message: "You are not an administrator",stack: error?.stack});
+        res.status(404).send({message: "You are not an administrator"});
     } else {
         next();
     }
