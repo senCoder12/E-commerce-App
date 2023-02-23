@@ -4,16 +4,13 @@ import dotenv from "dotenv";
 import PasswordValidator from "password-validator";
 import generator from "generate-password";
 import userModel from "../Models/user.model.js";
-import { generateToken, isValidMongodbId } from "../Utils/helper.js";
+import { generateToken, isValidMongodbId, hasSpecialChar } from "../Utils/helper.js";
 
 var schema = new PasswordValidator();
 schema.is().min(8).has().uppercase().has().lowercase().has().digits(1);
 dotenv.config();
 
-const hasSpecialChar = (password) => {
-  const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
-  return specialChars.test(password);
-};
+
 
 export const signup = async (req, res) => {
   const { email, password, first_name, last_name, mobile, role } = req.body;

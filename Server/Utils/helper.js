@@ -9,3 +9,8 @@ export const isValidMongodbId = (id) => {
 export const generateToken = (content, jwt_key, option) => {
   return jwt.sign(content, jwt_key, option);
 };
+
+const hasSpecialChar = (password) => {
+  const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+  return specialChars.test(password);
+};
