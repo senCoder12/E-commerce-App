@@ -7,6 +7,7 @@ import userRouter from "./Routes/user.js";
 import mongoose from 'mongoose';
 import cookieParser from "cookie-parser"
 import { errorHandler, notFound } from './Middleware/errorHandler.js';
+import { productRouter } from './Routes/product.js';
 dotenv.config();
 const PORT =  process.env.PORT || 5000;
 const app = express();
@@ -21,6 +22,8 @@ app.use(cookieParser())
 //     res.send("Hi there, Welcome to my server!");
 // })
 app.use("/auth",userRouter);
+app.use("/product",productRouter);
+
 app.use(errorHandler);
 mongoose.set('strictQuery', true);
 

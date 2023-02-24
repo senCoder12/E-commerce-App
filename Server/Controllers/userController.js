@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import PasswordValidator from "password-validator";
 import generator from "generate-password";
-import userModel from "../Models/user.model.js";
+import User from "../Models/user.model.js";
 import { generateToken, isValidMongodbId, hasSpecialChar } from "../Utils/helper.js";
 
 var schema = new PasswordValidator();
@@ -15,11 +15,11 @@ dotenv.config();
 export const signup = async (req, res) => {
   const { email, password, first_name, last_name, mobile, role } = req.body;
   try {
-    let oldUser = await userModel.findOne({ email });
+    let oldUser = await User.findOne({ email });
     if (oldUser) {
       return res.status(400).json({ message: "Email already exists" });
     }
-    oldUser = await userModel.findOne({ mobile });
+    oldUser = await User.findOne({ mobile });
     if (oldUser) {
       return res.status(400).json({ message: "Mobile number already exists" });
     }
@@ -36,7 +36,7 @@ export const signup = async (req, res) => {
         .json({ message: "Mobile number should be 10 number" });
     }
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = await userModel.create({
+    const newUser = await User.create({
       uid: generator.generate({
         length: 13,
         numbers: true,
@@ -63,7 +63,7 @@ export const signup = async (req, res) => {
 export const signin = async (req, res) => {
     try {
     const { email, password } = req.body;
-    const user = await userModel.find({ email });
+    const user = await User.find({ email });
     const {isBlocked} = user;
     if(isBlocked) {
       res.status(200).send({message:"You are blocked by the administrator! Please contact the administrator."});
@@ -91,7 +91,7 @@ export const signin = async (req, res) => {
           expiresIn: "10d",
           }
         );
-        const updateUser = await userModel.findByIdAndUpdate(user[0]._id,{
+        const updateUser = await User.findByIdAndUpdate(user[0]._id,{
           refreshToken
         },{
           new: true
@@ -125,7 +125,7 @@ export const signin = async (req, res) => {
 
 export const getAllUser = async (req, res) => {
     try {
-    const users = await userModel
+    const users = await User
         .find()
         .select(["-password", "-createdAt", "-updatedAt"]);
     res.status(200).send(users);
@@ -139,7 +139,7 @@ export const getAllUser = async (req, res) => {
 export const getUser = async(req, res) => {
     const {id} = req.params;
     try {
-        const user = await userModel.findById(id).select(["-password", "-createdAt", "-updatedAt"]);
+        const user = await User.findById(id).select(["-password", "-createdAt", "-updatedAt"]);
         res.status(200).send(user);
     } catch (error) {
         res.status(401).send({
@@ -151,7 +151,7 @@ export const getUser = async(req, res) => {
 export const deleteUser = async(req, res) => {
     const {_id} = req.user;
     try {
-        const user = await userModel.findByIdAndDelete(_id).select(["-password", "-createdAt", "-updatedAt"]);
+        const user = await User.findByIdAndDelete(_id).select(["-password", "-createdAt", "-updatedAt"]);
         res.status(200).send({user,"message":"successfully deleted"});
     } catch (error) {
         res.status(401).send({
@@ -166,7 +166,7 @@ export const updateUser = async(req, res) => {
       if(req.body && req.body.password) {
         req.body.password = await bcrypt.hash(req.body?.password, 10)
       }
-        const user = await userModel.findByIdAndUpdate(_id,{
+        const user = await User.findByIdAndUpdate(_id,{
             first_name: req.body?.first_name,
             last_name: req.body?.last_name,
             email: req.body?.email,
@@ -186,7 +186,7 @@ export const blockUser = async(req, res) => {
   const {id} = req.params;
   try {
     if(isValidMongodbId(id)) {
-      const updateBlockUserInfo = await userModel.findByIdAndUpdate(id,{
+      const updateBlockUserInfo = await User.findByIdAndUpdate(id,{
         isBlocked: true
       },{
         new: true
@@ -204,7 +204,7 @@ export const unblockUser = async(req, res) => {
   const {id} = req.params;
   try {
     if(isValidMongodbId(id)) {
-      const updateBlockUserInfo = await userModel.findByIdAndUpdate(id,{
+      const updateBlockUserInfo = await User.findByIdAndUpdate(id,{
         isBlocked: false
       },{
         new: true
@@ -224,7 +224,7 @@ export const handleRefreshToken = async (req, res) => {
     return res.status(403).send({ message:"No Refresh token available!"});
   }
   const refreshToken = cookie.refreshToken;
-  const user = await userModel.findOne({refreshToken});
+  const user = await User.findOne({refreshToken});
   if(!user) return res.status(403).send({ message:"No Refresh token available in db or not matched!"});
   jwt.verify(refreshToken, process.env.JWT_SECRET_KEY, async (err, decoded)=> {
     if(err || user.uid !== decoded.uid) return res.status(403).send({ message:"There is something wrong with refresh token!"});
@@ -242,7 +242,7 @@ export const handleRefreshToken = async (req, res) => {
       httpOnly: true,
       maxAge: 10 * 60 * 60 * 24 * 1000
     })
-    await userModel.findOneAndUpdate({uid: decoded.uid}, {
+    await User.findOneAndUpdate({uid: decoded.uid}, {
       refreshToken: accessToken
     })
     res.json({accessToken, message: "Token refreshed successfully!"})
@@ -255,7 +255,7 @@ export const logout = async(req, res) => {
     return res.status(403).send({ message:"No Refresh token available!"});
   }
   const refreshToken = cookie.refreshToken;
-  const user = await userModel.findOne({refreshToken});
+  const user = await User.findOne({refreshToken});
   if(!user) {
     res.clearCookie("refreshToken",{
       httpOnly: true,
@@ -267,7 +267,7 @@ export const logout = async(req, res) => {
   jwt.verify(refreshToken, process.env.JWT_SECRET_KEY,(err, decoded)=>{
     decodeData = decoded;
   })
-  await userModel.findOneAndUpdate({uid: decodeData.uid}, {
+  await User.findOneAndUpdate({uid: decodeData.uid}, {
     refreshToken: ""
   })
   res.clearCookie("refreshToken",{

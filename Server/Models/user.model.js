@@ -1,6 +1,4 @@
 import mongoose from "mongoose";
-import bcrypt from "bcrypt";
-
 
 const userSchema = new mongoose.Schema(
 {
@@ -54,6 +52,6 @@ timestamps: true,
 }
 );
 
-const userModel = mongoose.model("User", userSchema);
+const User = mongoose.model("User", userSchema);
 
-export default userModel;
+export default User;
