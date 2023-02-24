@@ -23,7 +23,7 @@ export const updateProduct = async(req, res) => {
         const updateProduct = await Product.findOneAndUpdate(id, req.body,{new:true});
         res.send({data: updateProduct,message: "Product updated successfully!"});
     } catch (error) {
-        res.status(404).send({error: error.message})
+        res.status(404).send({error: error.message});
     }
 }
 
@@ -33,7 +33,7 @@ export const deleteProduct = async(req, res) => {
         const deleteProduct = await Product.findOneAndDelete(id);
         res.send({data: deleteProduct,message: "Product deleted successfully!"});
     } catch (error) {
-        res.status(404).send({error: error.message})
+        res.status(404).send({message: error.message})
     }
 }
 
@@ -87,6 +87,6 @@ export const getAllProduct = async(req, res) => {
         const product = await query;
         res.json({data: product});
     } catch (error) {
-        res.status(404).send({error: error.message})
+        res.status(404).send({message: error.message})
     }
 }
