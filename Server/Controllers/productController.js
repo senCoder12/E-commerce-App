@@ -80,7 +80,7 @@ export const getAllProduct = async(req, res) => {
         if(req.query.page) {
             const productCount = await Product.countDocuments();
             if(skip>=productCount) {
-                res.status(404).send({error: error.message, message: "This page is not available."})
+                return res.status(404).send({error: error.message, message: "This page is not available."})
             }
         }
 
