@@ -1,13 +1,14 @@
-import { createProduct, deleteProduct, getAllProduct, getProduct, updateProduct } from "../Controllers/productController";
+import { createManyProduct, createProduct, deleteProduct, getAllProduct, getProduct, updateProduct } from "../Controllers/productController.js";
 import express from "express";
-import { authMiddleware, isAdmin } from "../Middleware/authMiddleware";
+import { authMiddleware, isAdmin } from "../Middleware/authMiddleware.js";
 
-export const productRouter = express.Router();
+const productRouter = express.Router();
 productRouter.post("/create", authMiddleware, isAdmin, createProduct);
+productRouter.post("/create-many", authMiddleware, isAdmin, createManyProduct);
 productRouter.get("/get-single/:id", getProduct);
-productRouter.get("/update/:id",  authMiddleware, isAdmin, updateProduct);
-productRouter.get("/delete/:id",  authMiddleware, isAdmin, deleteProduct);
+productRouter.put("/update/:id",  authMiddleware, isAdmin, updateProduct);
+productRouter.delete("/delete/:id",  authMiddleware, isAdmin, deleteProduct);
 productRouter.get("/get-all", getAllProduct);
 
-
+export default productRouter;
 

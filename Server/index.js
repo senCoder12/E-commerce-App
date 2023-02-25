@@ -4,10 +4,10 @@ import cors from "cors";
 import morgan from "morgan";
 import connection from "./Config/db.js"
 import userRouter from "./Routes/user.js";
+import productRouter  from './Routes/product.js';
 import mongoose from 'mongoose';
 import cookieParser from "cookie-parser"
 import { errorHandler, notFound } from './Middleware/errorHandler.js';
-import { productRouter } from './Routes/product.js';
 dotenv.config();
 const PORT =  process.env.PORT || 5000;
 const app = express();

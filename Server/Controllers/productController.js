@@ -1,4 +1,4 @@
-import Product from "../Models/product.model"
+import Product from "../Models/product.model.js"
 import slugify from "slugify";
 
 
@@ -14,13 +14,28 @@ export const createProduct = async(req, res) => {
     }
 }
 
+export const createManyProduct = async(req, res) => {
+    try {
+        req.body = req.body.map(e=> {
+            if(e.title) {
+                e.slug = slugify(e.title) + '-' + Math.random();
+            }
+            return e;
+        })
+        const newProducts = await Product.insertMany(req.body);
+        res.send({data: newProducts,message: " All Product added successfully!"});
+    } catch (error) {
+        res.status(404).send({error: error.message})
+    }
+}
+
 export const updateProduct = async(req, res) => {
     const {id} = req.params;
     try {
         if(req.body.title) {
             req.body.slug = slugify(req.body.title);
         }
-        const updateProduct = await Product.findOneAndUpdate(id, req.body,{new:true});
+        const updateProduct = await Product.findOneAndUpdate({_id:id}, req.body,{new:true});
         res.send({data: updateProduct,message: "Product updated successfully!"});
     } catch (error) {
         res.status(404).send({error: error.message});
