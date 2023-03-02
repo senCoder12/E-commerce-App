@@ -43,11 +43,11 @@ isBlocked: {
 refreshToken: {
     type: String,
 },
+address: [{type: mongoose.Schema.Types.ObjectId, ref: "Address"}],
+wishlist: [{type: mongoose.Schema.Types.ObjectId, ref: "Wishlist"}],
 passwordChangedAt: Date,
 passwordResetToken: String,
 passwordResetExpires: Date,
-address: [{type: mongoose.Schema.Types.ObjectId, ref: "Address"}],
-wishlist: [{type: mongoose.Schema.Types.ObjectId, ref: "Wishlist"}]
 },
 {
 versionKey: false,
