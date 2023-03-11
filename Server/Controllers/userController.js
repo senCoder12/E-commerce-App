@@ -5,6 +5,7 @@ import PasswordValidator from "password-validator";
 import generator from "generate-password";
 import User from "../Models/user.model.js";
 import { generateToken, isValidMongodbId, hasSpecialChar } from "../Utils/helper.js";
+import { sendEmail } from "./emailContriller.js";
 
 var schema = new PasswordValidator();
 schema.is().min(8).has().uppercase().has().lowercase().has().digits(1);
@@ -182,6 +183,21 @@ export const updateUser = async(req, res) => {
         }
 }
 
+export const updatePassword = async(req, res) => {
+  const {_id} = req.user;
+  const {password} = req.body;
+  if(isValidMongodbId(_id)) {
+    const user = await User.findById(_id);
+    if(password) {
+      user.password = await bcrypt.hash(password, 10);
+      const updatedPassword = await User.save();
+      res.json(updatedPassword);
+    } else {
+      res.json(user);
+    }
+  }
+}
+
 export const blockUser = async(req, res) => {
   const {id} = req.params;
   try {
@@ -275,4 +291,27 @@ export const logout = async(req, res) => {
     secure: true
   });
   return res.status(204).send({message: "Logout successfully!"});
+}
+
+export const forgetPasswordToken = async(req, res) => {
+  const {email} = req.body;
+  const user = await User.findOne({email: email});
+  if(!user) {
+    return res.status(404).send({message: "User not found with email"});
+  }
+  try {
+    const token = await user.createPasswordResetToken();
+    await user.save();
+    const resetUrl = `Hi, Please follow this link to reset your password. Thus link is valid till 10 minutes from now. <a href='http://localhost:8080/auth/reset-password/${token}'>Click Here</a>`;
+    const data = {
+      to: email,
+      text: "Hey User",
+      subject: "Forgot Password Link",
+      htm: resetUrl
+    }
+    sendEmail(data);
+    res.json({token: token});
+  } catch (error) {
+    return res.status(500).send({message: error.message});
+  }
 }
