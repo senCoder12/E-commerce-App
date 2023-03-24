@@ -1,4 +1,4 @@
-import { createManyProduct, createProduct, deleteProduct, getAllProduct, getProduct, updateProduct } from "../Controllers/productController.js";
+import { addToWishlist, createManyProduct, createProduct, deleteProduct, getAllProduct, getProduct, updateProduct } from "../Controllers/productController.js";
 import express from "express";
 import { authMiddleware, isAdmin } from "../Middleware/authMiddleware.js";
 
@@ -9,6 +9,8 @@ productRouter.get("/get-single/:id", getProduct);
 productRouter.put("/update/:id",  authMiddleware, isAdmin, updateProduct);
 productRouter.delete("/delete/:id",  authMiddleware, isAdmin, deleteProduct);
 productRouter.get("/get-all", getAllProduct);
+
+productRouter.put("/add-to-wishlist/:prodId",  authMiddleware, addToWishlist);
 
 export default productRouter;
 

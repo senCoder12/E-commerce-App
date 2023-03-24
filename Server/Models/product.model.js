@@ -49,6 +49,10 @@ const productSchema = new mongoose.Schema(
         postedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
       },
     ],
+    totalRatings: {
+      type: Number,
+      default: 0
+    }
   },
   {
     versionKey: false,

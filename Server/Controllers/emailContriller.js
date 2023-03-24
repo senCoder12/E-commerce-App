@@ -4,6 +4,7 @@ export const sendEmail = async (data, req, res) => {
     let transporter = nodemailer.createTransport({
         host: "smtp.google.com",
         port: 587,
+        service: 'gmail',
         secure: false, // true for 465, false for other ports
         auth: {
             user: process.env.MAIL_ID, // generated ethereal user

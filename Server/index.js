@@ -8,6 +8,8 @@ import productRouter  from './Routes/product.js';
 import mongoose from 'mongoose';
 import cookieParser from "cookie-parser"
 import { errorHandler, notFound } from './Middleware/errorHandler.js';
+import categoryRouter from './Routes/category.js';
+import brandRouter from './Routes/brand.js';
 dotenv.config();
 const PORT =  process.env.PORT || 5000;
 const app = express();
@@ -23,6 +25,10 @@ app.use(cookieParser())
 // })
 app.use("/auth",userRouter);
 app.use("/product",productRouter);
+app.use("/category",categoryRouter);
+app.use("/brand",brandRouter);
+
+
 
 app.use(errorHandler);
 mongoose.set('strictQuery', true);
