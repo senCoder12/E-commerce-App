@@ -1,4 +1,4 @@
-import { addToWishlist, createManyProduct, createProduct, deleteProduct, getAllProduct, getProduct, updateProduct } from "../Controllers/productController.js";
+import { addToWishlist, createManyProduct, createProduct, deleteProduct, getAllProduct, getProduct, ratings, updateProduct } from "../Controllers/productController.js";
 import express from "express";
 import { authMiddleware, isAdmin } from "../Middleware/authMiddleware.js";
 
@@ -11,6 +11,8 @@ productRouter.delete("/delete/:id",  authMiddleware, isAdmin, deleteProduct);
 productRouter.get("/get-all", getAllProduct);
 
 productRouter.put("/add-to-wishlist/:prodId",  authMiddleware, addToWishlist);
+productRouter.put("/rating",  authMiddleware, ratings);
+
 
 export default productRouter;
 

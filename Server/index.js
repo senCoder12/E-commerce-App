@@ -10,6 +10,7 @@ import cookieParser from "cookie-parser"
 import { errorHandler, notFound } from './Middleware/errorHandler.js';
 import categoryRouter from './Routes/category.js';
 import brandRouter from './Routes/brand.js';
+import couponRouter from './Routes/coupon.js';
 dotenv.config();
 const PORT =  process.env.PORT || 5000;
 const app = express();
@@ -27,6 +28,7 @@ app.use("/auth",userRouter);
 app.use("/product",productRouter);
 app.use("/category",categoryRouter);
 app.use("/brand",brandRouter);
+app.use("/coupon",couponRouter);
 
 
 

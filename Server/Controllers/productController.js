@@ -101,12 +101,10 @@ export const getAllProduct = async (req, res) => {
     if (req.query.page) {
       const productCount = await Product.countDocuments();
       if (skip >= productCount) {
-        return res
-          .status(404)
-          .send({
-            error: error.message,
-            message: "This page is not available.",
-          });
+        return res.status(404).send({
+          error: error.message,
+          message: "This page is not available.",
+        });
       }
     }
 
@@ -122,7 +120,7 @@ export const addToWishlist = async (req, res) => {
   const { prodId } = req.body;
   try {
     const user = await User.findById(_id);
-    const alreadyAdded = user.wishList.find((id) => id.toString === prodId);
+    const alreadyAdded = user.wishList.find((id) => id.toString() === prodId);
     if (alreadyAdded) {
       let updateUser = await User.findOneAndUpdate(
         _id,
@@ -147,6 +145,67 @@ export const addToWishlist = async (req, res) => {
       return res.send(updateUser);
     }
   } catch (error) {
-    return res.send({error: error.message});
+    return res.send({ error: error.message });
+  }
+};
+
+export const ratings = async (req, res) => {
+  const { _id } = req.user;
+  const { star, prodId, comment } = req.body;
+  try {
+    const product = await Product.findById(prodId);
+    let alreadyRated = product.ratings.find(
+      (user) => user.postedBy.toString() === _id.toString()
+    );
+    if (alreadyRated) {
+      const updateRating = await Product.updateOne(
+        {
+          ratings: { $elemMatch: alreadyRated },
+        },
+        {
+          $set: { "ratings.$.star": star },
+        },
+        {
+          new: true,
+        }
+      );
+    } else {
+      const rateProduct = await Product.findByIdAndUpdate(
+        prodId,
+        {
+          $push: {
+            ratings: {
+              star: star,
+              comment: comment,
+              postedBy: _id,
+            },
+          },
+        },
+        {
+          new: true,
+        }
+      );
+    }
+    const getAllRatings = await Product.findById(prodId);
+    let totalRating = getAllRatings.ratings.length;
+    let ratingSum = getAllRatings.ratings
+      .map((item) => item.star)
+      .reduce((acc, curr) => acc + curr, 0);
+    let actualRating = Math.round(ratingSum / totalRating);
+    let finalProduct = await Product.findByIdAndUpdate(
+      prodId,
+      {
+        totalRatings: actualRating,
+      },
+      {
+        new: true,
+      }
+    );
+    return res.send({
+      data: finalProduct,
+      message: "Rating updated successfully!",
+    });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
   }
 };

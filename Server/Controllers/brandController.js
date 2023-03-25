@@ -14,10 +14,10 @@ export const createBrand = async(req, res) => {
 export const updateBrand = async(req, res) => {
     const {id} = req.params;
     try {
-        const updateBrand = await Brand.findByIdAndUpdate(id, req.body,{
+        const brand = await Brand.findByIdAndUpdate(id, req.body,{
             new: true
         });
-        res.send({data: updateBrand,message: "Brand updated successfully!"});
+        res.send({data: brand,message: "Brand updated successfully!"});
     } catch (error) {
         res.status(404).send({error: error.message})
     }
@@ -27,8 +27,8 @@ export const deleteBrand = async(req, res) => {
     const {id} = req.params;
     if(isValidMongodbId(id)) {
         try {
-            const deleteBrand = await Brand.findByIdAndDelete(id);
-            res.send({data: deleteBrand,message: "Brand deleted successfully!"});
+            const brand = await Brand.findByIdAndDelete(id);
+            res.send({data: brand,message: "Brand deleted successfully!"});
         } catch (error) {
             return res.status(404).send({error: error.message})
         }
@@ -53,8 +53,8 @@ export const getBrand = async(req, res) => {
 
 export const getAllBrand = async(req, res) => {
     try {
-        const getAllBrand = await Brand.find();
-        res.send({data: getAllBrand});
+        const getAllBrands = await Brand.find();
+        res.send({data: getAllBrands});
     } catch (error) {
         return res.status(404).send({error: error.message})
     }
