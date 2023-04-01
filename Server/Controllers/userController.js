@@ -10,6 +10,9 @@ import {
   hasSpecialChar,
 } from "../Utils/helper.js";
 import { sendEmail } from "./emailContriller.js";
+import Cart from "../Models/cart.model.js";
+import Product from "../Models/product.model.js";
+import Coupon from "../Models/coupon.model.js";
 
 var schema = new PasswordValidator();
 schema.is().min(8).has().uppercase().has().lowercase().has().digits(1);
@@ -69,7 +72,7 @@ export const signin = async (req, res) => {
     const user = await User.find({ email });
     const { isBlocked } = user;
     if (isBlocked) {
-      res
+      return res
         .status(200)
         .send({
           message:
@@ -128,7 +131,6 @@ export const signin = async (req, res) => {
       });
     }
   } catch (err) {
-    console.log(err);
     res.status(500).send({
       message: "Something went wrong",
     });
@@ -383,3 +385,182 @@ export const resetPassword = async (req, res) => {
   user.passwordResetExpires = undefined;
   res.status(200).send({ message: "Password reset successfully", data: user });
 };
+
+// Admin login
+export const loginAsAdmin = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const user = await User.find({ email });
+    const { isBlocked } = user;
+    if (isBlocked) {
+      return res
+        .status(200)
+        .send({
+          message:
+            "You are blocked by the administrator! Please contact the administrator.",
+        });
+    }
+    if(user.role !== 'admin') {
+      return res
+        .status(404)
+        .send({
+          message:
+            "Not authorized!",
+        });
+    }
+    if (user && user.length == 1) {
+      const isValidPassword = await bcrypt.compare(password, user[0].password);
+      if (isValidPassword) {
+        const token = generateToken(
+          {
+            uid: user[0].uid,
+            email,
+          },
+          process.env.JWT_SECRET_KEY,
+          {
+            expiresIn: "30d",
+          }
+        );
+        const refreshToken = generateToken(
+          {
+            uid: user[0].uid,
+            email,
+          },
+          process.env.JWT_SECRET_KEY,
+          {
+            expiresIn: "10d",
+          }
+        );
+        const updateUser = await User.findByIdAndUpdate(
+          user[0]._id,
+          {
+            refreshToken,
+          },
+          {
+            new: true,
+          }
+        );
+        res.cookie("refreshToken", refreshToken, {
+          httpOnly: true,
+          maxAge: 10 * 60 * 60 * 24 * 1000,
+        });
+        res.status(200).send({
+          token,
+          data: updateUser,
+          message: "Login successful",
+        });
+      } else {
+        res.status(501).send({
+          message: "Password is not valid",
+        });
+      }
+    } else {
+      res.status(501).send({
+        message: "Wrong credential",
+      });
+    }
+  } catch (err) {
+    res.status(500).send({
+      message: "Something went wrong",
+    });
+  }
+};
+
+// Get wish list
+export const getWishList = async(req, res) => {
+  const {_id} = req.user;
+  try {
+    const user = await User.findOne(_id).populate("wishlist");
+    return res.json(user);
+  } catch (error) {
+    return res.status(403).send({ message: error.message });
+  }
+}
+
+// Save address
+export const saveAddress = async (req, res) => {
+  const { _id } = req.user;
+  try {
+  if(isValidMongodbId(_id)) {
+    const updateUser = await User.findByIdAndUpdate(_id, {
+      address: req?.body?.address
+    },{
+      new: true
+    })
+    return res.status(200).send({ message: "Thanks for updating your address.", data: updateUser });
+  } 
+  return res.status(403).send({ message: "Mongodb id not found." });
+  } catch (error) {
+    return res.status(404).send({ message: error.message });
+  }  
+};
+
+// Update cart
+export const userCart = async(req, res) => {
+  const {_id} = req.user;
+  const {cart} = req.body;
+  try {
+    if(isValidMongodbId(_id)) {
+      let products = [];
+      const user = await User.findById(_id);
+      const alreadyExistCart = await Cart.findOne({orderBy: user._id});
+      if(alreadyExistCart) {
+        alreadyExistCart.remove();
+      }
+      for(let i = 0; i < cart.length; i++) {
+        let object = {};
+        object.product = cart[i]._id;
+        object.count = cart[i].count;
+        object.color = cart[i].color;
+        let getPrice = await Product.findById(cart[i]._id).select("price").exec();
+        object.price = getPrice.price;
+        products.push(object);
+      }
+      let cartTotal = 0;
+      for(let product of products) {
+        cartTotal += product.count;
+      }
+      let newCart = await new Cart({
+        products,
+        cartTotal,
+        orderBy: user._id
+      })
+      return res.send({data:newCart,message:"Cart item added successfully!"});
+    }
+  } catch (error) {
+    return res.status(500).send({ message: error.message });
+  }
+}
+
+// Get a cart
+export const getUserCart = async(req, res) => {
+  const {_id} = req.user;
+  try {
+    if(isValidMongodbId(_id)) {
+      const cart = await Cart.findOne({orderBy: _id}).populate("products.product");
+      return res.send(cart);
+    }
+  } catch (error) { 
+    return res.status(500).send({ message: error.message });
+  }
+}
+
+export const emptyCart = async(req, res) => {
+  const {_id} = req.user;
+  try {
+    if(isValidMongodbId(_id)) {
+      const user = await User.findOne({_id});
+      const cart = await Cart.findOneAndRemove({orderBy: user._id});
+      res.json(cart);
+    }
+  } catch (error) {
+    return res.status(500).send({ message: error.message });
+  }
+}
+
+// Apply coupon
+export const applyCoupon = async (req, res) => {
+  const {coupon} = req.body;
+  const validCoupon = await Coupon.findOne({ name: coupon });
+  
+}

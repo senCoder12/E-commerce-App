@@ -117,7 +117,7 @@ export const getAllProduct = async (req, res) => {
 
 export const addToWishlist = async (req, res) => {
   const { _id } = req.user;
-  const { prodId } = req.body;
+  const { prodId } = req.params;
   try {
     const user = await User.findById(_id);
     const alreadyAdded = user.wishList.find((id) => id.toString() === prodId);
