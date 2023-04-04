@@ -1,4 +1,5 @@
 import bcrypt from "bcrypt";
+import uniqid from 'uniqid';
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import PasswordValidator from "password-validator";
@@ -561,6 +562,101 @@ export const emptyCart = async(req, res) => {
 // Apply coupon
 export const applyCoupon = async (req, res) => {
   const {coupon} = req.body;
+  const { _id } = req.user;
   const validCoupon = await Coupon.findOne({ name: coupon });
-  
+  if(validCoupon == null) {
+    return res.status(200).send({message: 'Invalid coupon code'});
+  }
+  if(!isValidMongodbId(_id)) {
+    return res.status(500).send({message: 'MongoDB ID is invalid!'});
+  }
+  const user = req.user;
+  try {
+    let {cartTotal} = await Cart.findOne({
+      orderBy: user._id
+    }).populate("products.product");
+    let totalAfterDiscount = (cartTotal - (cartTotal * validCoupon.discount) / 100).toFixed(2);
+    await Cart.findByIdAndUpdate(
+      {orderBy: user._id},
+      {totalAfterDiscount: totalAfterDiscount},
+      {new: true}
+    )
+    res.send(totalAfterDiscount);
+  } catch (error) {
+    res.status(500).send({message: error.message});
+  }
+}
+
+// Create order
+export const createOrder = async(req,res) => {
+  const {COD, couponApplied} = req.body;
+  const { _id } = req.user;
+  if(!isValidMongodbId(_id)) {
+    return res.status(500).send({message: 'MongoDB ID is invalid!'});
+  }
+  if(!COD) return res.send(404).send({message: "Create cash order failed."});
+  try {
+    let userCart = await Cart.findOne({orderBy: _id});
+    let finalAmount = 0;
+    if(couponApplied && userCart.totalAfterDiscount) {
+      finalAmount = userCart.totalAfterDiscount;
+    } else {
+      finalAmount = userCart.cartTotal;
+    }
+    let newOrder = await new Order({
+      products: userCart.products,
+      paymentIntent: {
+        id: uniqid(),
+        method: COD,
+        amount: finalAmount,
+        status: 'Cash on Delivery',
+        createdAt: Date.now(),
+        currency: "usd"
+      },
+      orderBy: _id,
+      orderStatus: "Cash on Delivery"
+    }).save();
+    let update = userCart.products.map((item)=> {
+      return {
+        updateOne: {
+          filter: { _id: item.product._id},
+          update: { $inc: {quantity: -item.count, sold: +item.count}}
+        }
+      }
+    })
+    const updated = await Product.bulkWrite(update, {});
+    return response.status(200).send({message: "Thank you for your order!"})
+  } catch (error) {
+    res.status(500).send({message: error.message});
+  }
+}
+
+export const getOrder = async (req, res) => {
+  const {_id} = req.user;
+  try {
+    if(isValidMongodbId(_id)) {
+      const userOrders = await Order.findOne({orderBy: _id}).populate("products.product").exec();
+      return res.status(200).send(userOrders);
+    } else {
+      return res.status(500).send({message: 'MongoDB ID is invalid!'});
+    }
+  } catch (error) {
+    res.status(500).send({message: error.message});
+  }
+}
+
+export const updateOrderStatus = async (req, res) => {
+  const {id} = req.params;
+  const {status} = req.body;
+  try {
+    const updateOrder = await Order.findByIdAndUpdate(id, {
+      orderStatus: status,
+      paymentIntent: {
+        status: status
+      }
+    },{new : true});
+    res.status(200).send({updateOrder,message: "Order status updated successfully."});
+  } catch (error) {
+    res.status(500).send({message: error.message});
+  }
 }

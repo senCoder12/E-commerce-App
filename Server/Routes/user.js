@@ -1,5 +1,5 @@
 import express from "express";
-import { blockUser, deleteUser, emptyCart, forgetPasswordToken, getAllUser, getUser, getUserCart, getWishList, handleRefreshToken, loginAsAdmin, logout, resetPassword, saveAddress, signin, signup, unblockUser, updatePassword, updateUser, userCart, } from "../Controllers/userController.js";
+import { applyCoupon, blockUser, createOrder, deleteUser, emptyCart, forgetPasswordToken, getAllUser, getOrder, getUser, getUserCart, getWishList, handleRefreshToken, loginAsAdmin, logout, resetPassword, saveAddress, signin, signup, unblockUser, updateOrderStatus, updatePassword, updateUser, userCart, } from "../Controllers/userController.js";
 import { authMiddleware, isAdmin } from "../Middleware/authMiddleware.js";
 
 const userRouter = express.Router();
@@ -23,6 +23,10 @@ userRouter.put('/update-user',authMiddleware, updateUser);
 userRouter.put('/save-address',authMiddleware, saveAddress);
 userRouter.put('/block-user/:id',authMiddleware, isAdmin, blockUser);
 userRouter.put('/unblock-user/:id',authMiddleware, isAdmin, unblockUser);
+userRouter.put('/apply-coupon',authMiddleware, applyCoupon);
+userRouter.post('/order/create-order', authMiddleware, createOrder);
+userRouter.get('/order/user-order', authMiddleware, getOrder);
+userRouter.put('/order/update-order/:id',authMiddleware, isAdmin, updateOrderStatus);
 
 
 
